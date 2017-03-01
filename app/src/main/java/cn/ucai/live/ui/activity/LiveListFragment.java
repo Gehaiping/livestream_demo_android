@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +44,7 @@ public class LiveListFragment extends Fragment {
     private static final String TAG = LiveListFragment.class.getSimpleName();
 
 //    private ProgressBar pb;
-    private ListView listView;
+//    private ListView listView;
     private LiveAdapter adapter;
 
     private List<EMChatRoom> chatRoomList;
@@ -80,7 +79,7 @@ public class LiveListFragment extends Fragment {
 
         chatRoomList = new ArrayList<EMChatRoom>();
         rooms = new ArrayList<EMChatRoom>();
-        adapter = new LiveAdapter(getContext(), getLiveRoomList(chatRoomList));
+//        adapter = new LiveAdapter(getContext(), getLiveRoomList(chatRoomList));
 
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
 //        footView = getView().inflate(R.layout.em_listview_footer_view, recyclerView, false);
@@ -89,7 +88,7 @@ public class LiveListFragment extends Fragment {
         recyclerView.setLayoutManager(gm);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new GridMarginDecoration(6));
-        recyclerView.setAdapter(adapter);
+//        recyclerView.setAdapter(adapter);
 
 //        footLoadingLayout = (LinearLayout) footView.findViewById(R.id.loading_layout);
 //        footLoadingPB = (ProgressBar)footView.findViewById(R.id.loading_bar);
@@ -145,11 +144,9 @@ public class LiveListFragment extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if(newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE){
-                    if(pageCount != 0){
-                        int lasPos = gm.findLastVisibleItemPosition();
-                        if(hasMoreData && !isLoading && lasPos == listView.getCount()-1){
-                            loadAndShowData();
-                        }
+                    int lasPos = gm.findLastVisibleItemPosition();
+                    if (hasMoreData && !isLoading && lasPos == chatRoomList.size() - 1) {
+                        loadAndShowData();
                     }
                 }
             }
@@ -172,7 +169,7 @@ public class LiveListFragment extends Fragment {
                             .chatroomManager().fetchPublicChatRoomsFromServer(pagesize, cursor);
                     //get chat room list
                     final List<EMChatRoom> chatRooms = result.getData();
-                    L.e(TAG, "charRooms=====" + chatRooms.size());
+                    L.e(TAG, "charRooms=====" + chatRooms.size() + "isFirstLoading====" + isFirstLoading);
                     getActivity().runOnUiThread(new Runnable() {
 
                         public void run() {
@@ -186,7 +183,7 @@ public class LiveListFragment extends Fragment {
 //                                pb.setVisibility(View.INVISIBLE);
                                 isFirstLoading = false;
                                 adapter = new LiveAdapter(getContext(), getLiveRoomList(chatRoomList));
-//                                listView.setAdapter(adapter);
+                                recyclerView.setAdapter(adapter);
 //                                rooms.addAll(chatRooms);
                             }else{
                                 if(chatRooms.size() < pagesize){
@@ -228,6 +225,7 @@ public class LiveListFragment extends Fragment {
             liveRoom.setCover(R.drawable.test1);
             liveRoom.setAnchorId(room.getOwner());
             roomList.add(liveRoom);
+            L.e(TAG, "liveRoom====" + liveRoom.getName());
         }
 
         return roomList;
