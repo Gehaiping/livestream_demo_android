@@ -17,6 +17,22 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
+import com.hyphenate.easeui.widget.EaseImageView;
+import com.ucloud.common.util.DeviceUtils;
+import com.ucloud.live.UEasyStreaming;
+import com.ucloud.live.UStreamingProfile;
+import com.ucloud.live.widget.UAspectFrameLayout;
+
+import java.util.List;
+import java.util.Random;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,17 +41,6 @@ import cn.ucai.live.data.TestDataRepository;
 import cn.ucai.live.data.model.LiveRoom;
 import cn.ucai.live.data.model.LiveSettings;
 import cn.ucai.live.utils.Log2FileUtil;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.easeui.widget.EaseAlertDialog;
-import com.ucloud.common.util.DeviceUtils;
-import com.ucloud.live.UEasyStreaming;
-import com.ucloud.live.UStreamingProfile;
-import com.ucloud.live.widget.UAspectFrameLayout;
-import java.util.List;
-import java.util.Random;
 
 public class StartLiveActivity extends LiveBaseActivity
     implements UEasyStreaming.UStreamingStateListener {
@@ -44,6 +49,7 @@ public class StartLiveActivity extends LiveBaseActivity
   @BindView(R.id.container) UAspectFrameLayout mPreviewContainer;
   @BindView(R.id.start_container) RelativeLayout startContainer;
   @BindView(R.id.countdown_txtv) TextView countdownView;
+  @BindView(R.id.eiv_avatar)  EaseImageView userAvatar;
   @BindView(R.id.tv_username) TextView usernameView;
   @BindView(R.id.btn_start) Button startBtn;
   @BindView(R.id.finish_frame) ViewStub liveEndLayout;
@@ -81,10 +87,13 @@ public class StartLiveActivity extends LiveBaseActivity
     setContentView(R.layout.activity_start_live);
     ButterKnife.bind(this);
 
+    EaseUserUtils.setAppUserAvatar(StartLiveActivity.this, EMClient.getInstance().getCurrentUser(), userAvatar);
+    EaseUserUtils.setAppUserNick(EMClient.getInstance().getCurrentUser(), usernameView);
+
     liveId = TestDataRepository.getLiveRoomId(EMClient.getInstance().getCurrentUser());
     chatroomId = TestDataRepository.getChatRoomId(EMClient.getInstance().getCurrentUser());
-    anchorId = EMClient.getInstance().getCurrentUser();
-    usernameView.setText(anchorId);
+//    anchorId = EMClient.getInstance().getCurrentUser();
+//    usernameView.setText(anchorId);
     initEnv();
   }
 
