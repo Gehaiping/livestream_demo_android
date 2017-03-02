@@ -221,8 +221,8 @@ public class LiveListFragment extends Fragment {
                                     L.e(TAG, "No more data");
                                     hasMoreData = false;
                                     footLoadingLayout.setVisibility(View.VISIBLE);
-                                    footLoadingPB.setVisibility(View.VISIBLE);
-                                    footLoadingText.setText("No more data");
+                                    footLoadingPB.setVisibility(View.GONE);
+                                    footLoadingText.setText("没有更多数据了！");
                                 }
                                 adapter.notifyDataSetChanged();
                             }
@@ -246,7 +246,7 @@ public class LiveListFragment extends Fragment {
         }).start();
     }
     /**
-     * 生成测试数据
+     * 将聊天室转换为直播间
      */
     public static List<LiveRoom> getLiveRoomList(List<EMChatRoom> chatRooms) {
         List<LiveRoom> roomList = new ArrayList<>();
