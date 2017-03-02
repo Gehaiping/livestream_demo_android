@@ -262,10 +262,28 @@ public class StartLiveActivity extends LiveBaseActivity
   @OnClick(R.id.img_bt_close) void closeLive() {
     mEasyStreaming.stopRecording();
     if (!isStarted) {
+      L.e(TAG, "closeLive,isStarted====" + isStarted);
       finish();
       return;
     }
+    L.e(TAG, "closeLive,----------------====");
+    removeLive();
     showConfirmCloseLayout();
+  }
+
+  private void removeLive() {
+    NetDao.removeLive(StartLiveActivity.this, chatroomId, new OnCompletListener<String>() {
+      @Override
+      public void onSuccess(String s) {
+        L.e(TAG, "removeLive,s====" + s);
+
+      }
+
+      @Override
+      public void onError(String error) {
+        L.e(TAG, "removeLive,error====" + error);
+      }
+    });
   }
 
   @OnClick(R.id.img_bt_switch_voice) void toggleMicrophone(){
