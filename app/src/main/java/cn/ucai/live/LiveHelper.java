@@ -44,6 +44,7 @@ import java.util.Map;
 import cn.ucai.live.data.NetDao;
 import cn.ucai.live.data.db_local.LiveDBManager;
 import cn.ucai.live.data.db_local.UserDao;
+import cn.ucai.live.data.model.Gift;
 import cn.ucai.live.data.model.Result;
 import cn.ucai.live.ui.activity.ChatActivity;
 import cn.ucai.live.ui.activity.MainActivity;
@@ -78,6 +79,8 @@ public class LiveHelper {
     private Map<String, EaseUser> contactList;
 
     private Map<String, User> appContactList;
+
+    private Map<Integer, Gift> appGiftList;
 
     private static LiveHelper instance = null;
 
@@ -154,7 +157,43 @@ public class LiveHelper {
             setGlobalListeners();
             broadcastManager = LocalBroadcastManager.getInstance(appContext);
             initDbDao();
+
+            initGiftList();
         }
+    }
+
+    private void initGiftList() {
+        NetDao.loadAllGift(appContext, new OnCompletListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                if (s != null) {
+                    Result result = ResultUtils.getListResultFromJson(s, Gift.class);
+                    if (result != null && result.isRetMsg()) {
+                        List<Gift> list = (List<Gift>) result.getRetData();
+                        if (list != null && list.size() > 0) {
+                            L.e(TAG, "gift list ====" + list);
+                            Map<Integer, Gift> giftMap = new HashMap<Integer, Gift>();
+                            for (Gift gift : list) {
+                                giftMap.put(gift.getId(), gift);
+                            }
+                            getAppGiftList().clear();
+                            getAppGiftList().putAll(giftMap);
+
+                            UserDao dao = new UserDao(appContext);
+                            List<Gift> gifts = new ArrayList<Gift>(giftMap.values());
+                            dao.saveAppGiftList(gifts);
+                        }
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
 
@@ -1151,5 +1190,39 @@ public class LiveHelper {
                         L.e("UserProfileManger", "error=" + error);
                     }
                 });
+    }
+
+    /**
+     * update contact list
+     *
+     * @param giftList
+     */
+    public void setAppGiftList(Map<Integer, Gift> giftList) {
+        if (giftList == null) {
+            if (appGiftList != null) {
+                appGiftList.clear();
+            }
+            return;
+        }
+
+        appGiftList = giftList;
+    }
+
+    /**
+     * get contact list
+     *
+     * @return
+     */
+    public Map<Integer, Gift> getAppGiftList() {
+        if (appGiftList == null || appGiftList.size() == 0) {
+            appGiftList = demoModel.getAppGiftList();
+        }
+
+        // return a empty non-null object to avoid app crash
+        if (appGiftList == null) {
+            return new Hashtable<Integer, Gift>();
+        }
+
+        return appGiftList;
     }
 }
