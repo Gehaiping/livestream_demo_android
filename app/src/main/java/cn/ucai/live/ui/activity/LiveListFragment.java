@@ -83,7 +83,7 @@ public class LiveListFragment extends Fragment {
 
         chatRoomList = new ArrayList<EMChatRoom>();
         rooms = new ArrayList<EMChatRoom>();
-//        adapter = new LiveAdapter(getContext(), getLiveRoomList(chatRoomList));
+        adapter = new LiveAdapter(getContext(), getLiveRoomList(chatRoomList));
 
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
 //        footView = getView().inflate(R.layout.em_listview_footer_view, recyclerView, false);
@@ -92,7 +92,7 @@ public class LiveListFragment extends Fragment {
         recyclerView.setLayoutManager(gm);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new GridMarginDecoration(6));
-//        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
 
         mSrl = (SwipeRefreshLayout) getView().findViewById(R.id.srl);
         mTvRefresh = (TextView) getView().findViewById(R.id.tv_refresh);
@@ -210,13 +210,17 @@ public class LiveListFragment extends Fragment {
                                 if(chatRooms.size() == pagesize)
                                     footLoadingLayout.setVisibility(View.VISIBLE);
                             }
-                            if(isFirstLoading){
+                            if(isFirstLoading) {
 //                                pb.setVisibility(View.INVISIBLE);
                                 isFirstLoading = false;
-                                adapter = new LiveAdapter(getContext(), getLiveRoomList(chatRoomList));
-                                recyclerView.setAdapter(adapter);
+                                adapter.initData(getLiveRoomList(chatRoomList));
+//                                adapter = new LiveAdapter(getContext(), getLiveRoomList(chatRoomList));
+//                                recyclerView.setAdapter(adapter);
 //                                rooms.addAll(chatRooms);
-                            }else{
+//                            }else{
+
+                            }
+                                adapter.notifyDataSetChanged();
                                 if(chatRooms.size() < pagesize){
                                     L.e(TAG, "No more data");
                                     hasMoreData = false;
@@ -224,8 +228,6 @@ public class LiveListFragment extends Fragment {
                                     footLoadingPB.setVisibility(View.GONE);
                                     footLoadingText.setText("没有更多数据了！");
                                 }
-                                adapter.notifyDataSetChanged();
-                            }
                             isLoading = false;
                         }
                     });
@@ -254,7 +256,7 @@ public class LiveListFragment extends Fragment {
             LiveRoom liveRoom = new LiveRoom();
             liveRoom.setName(room.getName());
             liveRoom.setAudienceNum(room.getAffiliationsCount());
-            liveRoom.setId(room.getId());
+            liveRoom.setId(room.getOwner());
             liveRoom.setChatroomId(room.getId());
             liveRoom.setCover(EaseUserUtils.getAppUserInfo(room.getOwner()).getAvatar());
             liveRoom.setAnchorId(room.getOwner());
@@ -287,7 +289,7 @@ public class LiveListFragment extends Fragment {
                     LiveRoom room = liveRoomList.get(position);
                     if (room.getAnchorId().equals(EMClient.getInstance().getCurrentUser())) {
                         context.startActivity(new Intent(context, StartLiveActivity.class)
-                                .putExtra("liveId", room.getId()));
+                                .putExtra("liveroom", liveRoomList.get(position)));
                     } else {
                         context.startActivity(new Intent(context, LiveDetailsActivity.class)
                                 .putExtra("liveroom", liveRoomList.get(position)));
@@ -311,6 +313,13 @@ public class LiveListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return liveRoomList.size();
+        }
+
+        public void initData(List<LiveRoom> list) {
+            if (liveRoomList!=null)
+                liveRoomList.clear();
+            liveRoomList.addAll(list);
+            notifyDataSetChanged();
         }
     }
 
