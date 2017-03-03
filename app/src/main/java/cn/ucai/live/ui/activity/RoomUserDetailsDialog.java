@@ -13,7 +13,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.hyphenate.easeui.utils.EaseUserUtils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,6 +32,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
   Unbinder unbinder;
   @BindView(R.id.tv_username) TextView usernameView;
   @BindView(R.id.btn_mentions) Button mentionBtn;
+  @BindView(R.id.dialog_user_avatar) ImageView mDialogUserAvatar;
 
   private String username;
 
@@ -53,6 +58,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
     }
     if (username != null) {
       usernameView.setText(username);
+        EaseUserUtils.setAppUserAvatar(getContext(), username, mDialogUserAvatar);
     }
     mentionBtn.setText("@TA");
   }
