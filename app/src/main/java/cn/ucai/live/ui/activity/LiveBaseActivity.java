@@ -445,15 +445,19 @@ public abstract class LiveBaseActivity extends BaseActivity {
   }
 
   @OnClick(R.id.present_image) void onPresentImageClick() {
+    final RoomGiftListDialog dialog =
+            RoomGiftListDialog.newInstance();
+    dialog.show(getSupportFragmentManager(), "RoomGiftListDialog");
+  }
+
+  private void sentGiftMsg() {
     User user=EaseUserUtils.getAppUserInfo(EMClient.getInstance().getCurrentUser());
     L.e(TAG, "send present ,user=====" + user);
     EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
     message.setReceipt(chatroomId);
     EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(LiveConstants.CMD_GIFT);
     message.addBody(cmdMessageBody);
-
     message.setAttribute(I.User.NICK, user.getMUserNick());
-
     message.setChatType(EMMessage.ChatType.ChatRoom);
     EMClient.getInstance().chatManager().sendMessage(message);
     showLeftGiftVeiw(message);
