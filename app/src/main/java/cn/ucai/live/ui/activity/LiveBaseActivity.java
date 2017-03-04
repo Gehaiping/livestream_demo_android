@@ -454,13 +454,14 @@ public abstract class LiveBaseActivity extends BaseActivity {
       @Override
       public void onClick(View v) {
         int id = (int) v.getTag();
-        sendGiftMsg(id);
+        sendGiftMsg(dialog,id);
       }
     });
     dialog.show(getSupportFragmentManager(), "RoomGiftListDialog");
   }
 
-  private void sendGiftMsg(int id) {
+  private void sendGiftMsg(RoomGiftListDialog dialog,int id) {
+    dialog.dismiss();
     User user=EaseUserUtils.getAppUserInfo(EMClient.getInstance().getCurrentUser());
     L.e(TAG, "send present ,user=====" + user);
     EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
