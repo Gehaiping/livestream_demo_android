@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -88,19 +90,21 @@ public class RoomGiftListDialog extends DialogFragment {
             Gift gift = next.getValue();
             mGiftList.add(gift);
         }
+        Collections.sort(mGiftList, new Comparator<Gift>() {
+            @Override
+            public int compare(Gift lhs, Gift rhs) {
+                return lhs.getId().compareTo(rhs.getId());
+            }
+        });
+        adapter.notifyDataSetChanged();
     }
 
 
-    private UserDetailsDialogListener dialogListener;
+    private View.OnClickListener mListener;
 
-    public void setUserDetailsDialogListener(UserDetailsDialogListener dialogListener) {
-        this.dialogListener = dialogListener;
+    public void setGiftOnClickListener(View.OnClickListener listener) {
+        this.mListener = listener;
     }
-
-    interface UserDetailsDialogListener {
-        void onMentionClick(String username);
-    }
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -172,6 +176,7 @@ public class RoomGiftListDialog extends DialogFragment {
             GiftViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
+                mLayoutGift.setOnClickListener(mListener);
             }
         }
     }
