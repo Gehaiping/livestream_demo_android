@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -473,6 +475,15 @@ public abstract class LiveBaseActivity extends BaseActivity {
       AlertDialog.Builder builder = new AlertDialog.Builder(LiveBaseActivity.this);
       builder.setTitle("提示")
               .setMessage("该礼物需要支付" + gift.getGprice() + "元,你确定支付吗？");
+      View view = getLayoutInflater().inflate(R.layout.layout_payment_tip, null);
+      CheckBox cb = (CheckBox) view.findViewById(R.id.payment_tips_nomore);
+      cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            PreferenceManager.getInstance().setPayMentTip(isChecked);
+        }
+      });
+      builder.setView(view);
       builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface d, int which) {
