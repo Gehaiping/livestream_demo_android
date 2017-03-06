@@ -58,11 +58,11 @@ public class WalletActivity extends AppCompatActivity {
                                 change = wallet.getBalance();
                                 setChange();
                             }
-                            if (!success) {
-                                PreferenceManager.getInstance().setCurrentuserChange(0);
-                            }
-                            loadingView.setVisibility(View.GONE);
                         }
+                        if (!success) {
+                            PreferenceManager.getInstance().setCurrentuserChange(0);
+                        }
+                        loadingView.setVisibility(View.GONE);
                     }
 
                     @Override
