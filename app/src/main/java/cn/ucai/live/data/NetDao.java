@@ -196,7 +196,7 @@ public class NetDao {
     public static void loadChange(Context context, String username, OnCompletListener<String> listener) {
         OkHttpUtils<String> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_BALANCE)
-                .addParam("username", username)
+                .addParam("uname", username)
                 .targetClass(String.class)
                 .execute(listener);
     }
