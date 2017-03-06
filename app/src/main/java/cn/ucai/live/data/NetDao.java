@@ -192,4 +192,12 @@ public class NetDao {
                 .targetClass(String.class)
                 .execute(listener);
     }
+
+    public static void loadChange(Context context, String username, OnCompletListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_BALANCE)
+                .addParam("username", username)
+                .targetClass(String.class)
+                .execute(listener);
+    }
 }
