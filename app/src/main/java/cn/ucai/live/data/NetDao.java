@@ -212,4 +212,15 @@ public class NetDao {
                 .targetClass(String.class)
                 .execute(listener);
     }
+
+    public static void getRechargeStatements(Context context,String username, int pageId, int pagesize,
+                                  OnCompletListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_RECHARGE_STATEMENTS_PAGE)
+                .addParam("uname", username)
+                .addParam("pageId", String.valueOf(pageId))
+                .addParam("pageSize", String.valueOf(pagesize))
+                .targetClass(String.class)
+                .execute(listener);
+    }
 }

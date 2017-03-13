@@ -11,11 +11,13 @@ import com.hyphenate.chat.EMClient;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.live.R;
 import cn.ucai.live.data.NetDao;
 import cn.ucai.live.data.model.Result;
 import cn.ucai.live.data.model.Wallet;
 import cn.ucai.live.utils.CommonUtils;
+import cn.ucai.live.utils.MFGT;
 import cn.ucai.live.utils.OnCompletListener;
 import cn.ucai.live.utils.PreferenceManager;
 import cn.ucai.live.utils.ResultUtils;
@@ -76,5 +78,10 @@ public class WalletActivity extends AppCompatActivity {
     private void setChange() {
         change = PreferenceManager.getInstance().getCurrentuserChange();
         mTvChangeBalance.setText("￥" + Float.valueOf(String.valueOf(change)));
+    }
+
+    @OnClick(R.id.tv_change_details)
+    public void onClick() {
+        MFGT.gotoChangeDetails(WalletActivity.this);
     }
 }

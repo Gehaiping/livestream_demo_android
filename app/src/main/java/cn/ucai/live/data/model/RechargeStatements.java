@@ -9,7 +9,7 @@ public class RechargeStatements {
 
     private Integer rmb;
 
-    private String rdate;
+    private Long rdate;
 
     public Integer getId() {
         return id;
@@ -43,11 +43,11 @@ public class RechargeStatements {
         this.rmb = rmb;
     }
 
-    public String getRdate() {
+    public Long getRdate() {
         return rdate;
     }
 
-    public void setRdate(String rdate) {
+    public void setRdate(Long rdate) {
         this.rdate = rdate;
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import cn.ucai.live.I;
 import cn.ucai.live.R;
+import cn.ucai.live.ui.activity.ChangeDetailsActivity;
 import cn.ucai.live.ui.activity.LoginActivity;
 import cn.ucai.live.ui.activity.MainActivity;
 import cn.ucai.live.ui.activity.RegisterActivity;
@@ -51,5 +52,9 @@ public class MFGT {
 
     public static void gotoChange(Activity activity) {
         startActivity(activity, WalletActivity.class);
+    }
+
+    public static void gotoChangeDetails(Activity activity) {
+        startActivity(activity,ChangeDetailsActivity.class);
     }
 }
